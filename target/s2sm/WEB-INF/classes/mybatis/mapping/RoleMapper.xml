@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.feel.dao.RoleDao">
+    <select id="getAllRole" resultType="java.util.Map">
+        SELECT * FROM T_ROLE
+    </select>
+
+    <select id="findRoleByParam" parameterType="java.util.Map" resultType="java.util.Map">
+        select * from T_ROLE where 1=1
+        <if test="id != null">
+            and id like #{id}
+        </if>
+        <if test="name != null">
+            and name >= #{name}
+        </if>
+        <if test="level != null">
+            and level = #{level}
+        </if>
+    </select>
+
+    <insert id="addRole" parameterType="com.feel.model.Role">
+        INSERT INTO T_ROLE (ID,NAME ,LEVEL ) VALUES (#{id},#{name},#{level})
+    </insert>
+
+    <delete id="deleteRoleById" parameterType="java.lang.String">
+        DELETE FROM T_ROLE WHERE ID=#{id}
+    </delete>
+
+    <update id="updateRole" parameterType="com.feel.model.Role">
+        UPDATE T_ROLE set level=#{level} where id=#{id}
+    </update>
+</mapper>

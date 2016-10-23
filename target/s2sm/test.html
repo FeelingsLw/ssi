@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="border: 2px solid cornflowerblue;width: 100%;height: auto">
+    ID: <input id="id" type="text"/>
+    NAME: <input id="rname" type="text"/>
+    LEVEL: <input id="level" type="text"/>
+    <button onclick="addRole()">增加</button>
+    <button onclick="deleteRoleById()" >删除</button>
+    <button onclick="updateRole()">更新</button>
+    <button onclick="getRole()">查询</button>
+
+</div>
+<div style="border: 2px solid indianred;width: 100%;height: 600px;margin-top: 5px">
+    <h5>数据：</h5>
+    <div id="data"></div>
+</div>
+</body>
+<script type="application/javascript">
+    var data;
+    var id;
+    var rname;
+    var level;
+
+    $(function(){
+        data=$("#data");
+    })
+    function getRole(){
+        var flag;
+        id=$("#id");
+        rname=$("#rname");
+        level=$("#level");
+        var url;
+        if(id.val()==''&&rname.val()==''&&level.val()==''){
+            url='getAllRole.do';
+            flag=true;
+        }else {
+            url='getRoleByparam.do';
+            flag=false;
+        }
+        $.ajax({
+            url:url,
+            data:{id:id.val(),name:rname.val(),level:level.val()},
+            type:"POST",
+            dataType:"json",
+            success:function(message){
+                if(flag){
+                    var context="<table style='border: 1px solid royalblue;width: 30%'><td style='border: 2px solid royalblue'>ID</td><td style='border: 2px solid royalblue'>职位</td><td style='border: 2px solid royalblue'>等级</td>";
+                    for(var i=0;i<message.length;i++){
+                        context+="<tr><td style='border: 1px solid royalblue'>"+message[i].id+"</td><td style='border: 1px solid royalblue'>"+message[i].name+"</td><td style='border: 1px solid royalblue'>"+message[i].level+"</td></tr>"
+                    }
+                    context=context+'</table>';
+                    data.html(context)
+                }else {
+                    var context="<table style='border: 1px solid royalblue;width: 30%'><td style='border: 2px solid royalblue'>ID</td><td style='border: 2px solid royalblue'>职位</td><td style='border: 2px solid royalblue'>等级</td>";
+                    context+="<tr><td style='border: 1px solid royalblue'>"+message.id+"</td><td style='border: 1px solid royalblue'>"+message.name+"</td><td style='border: 1px solid royalblue'>"+message.level+"</td></tr>"
+                    context=context+'</table>';
+                    data.html(context)
+                }
+
+
+            }
+        })
+    }
+    function deleteRoleById(){
+        id=$("#id");
+        $.ajax({
+            url:"deleteRoleById.do",
+            data:{id:id.val()},
+            type:"POST",
+            success:function(message){
+                data.html(message);
+            },
+            error:function(message){
+                data.html(message);
+            }
+        })
+    }
+    function addRole(){
+        id=$("#id");
+        rname=$("#rname");
+        level=$("#level");
+        $.ajax({
+            url:"addRole.do",
+            data:{id:id.val(),name:rname.val(),level:level.val()},
+            type:"POST",
+            success:function(message){
+                data.html(message);
+            },
+            error:function(message){
+                data.html(message);
+            }
+        })
+    }
+    function updateRole(){
+        id=$("#id");
+        rname=$("#rname");
+        level=$("#level");
+        $.ajax({
+            url:"updateRole.do",
+            data:{id:id.val(),level:level.val()},
+            type:"POST",
+            success:function(message){
+                data.html(message);
+            },
+            error:function(message){
+                data.html(message);
+            }
+        })
+    }
+</script>
+</html>
